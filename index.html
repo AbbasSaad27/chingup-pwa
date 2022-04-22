@@ -317,8 +317,9 @@ s0.parentNode.insertBefore(s1,s0);
 
 <script>
 
+  // getting the link element for prompt trigger
   var triggerPrompt = document.getElementsByClassName("trigger-prompt")[0]
-
+  // registering the service worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
     // .then(function(registration) {
@@ -327,23 +328,32 @@ s0.parentNode.insertBefore(s1,s0);
     // });
   }
 
+  // for deferring the prompt event
   var deferredPrompt;
 
-  window.addEventListener("beforeinstallPrompt", function(e) {
+  window.addEventListener("beforeinstallprompt", function(e) {
+    // preventing the default prompt
     e.preventDefault();
 
+    // saving the event
     deferredPrompt = e;
 
+    // making the link available
     triggerPrompt.style.opacity = "1"
   })
 
   triggerPrompt.addEventListener("click", function(e) {
+    // preventing the default value of the link
     e.preventDefault()
 
+    // if the event exists then do this
     if(deferredPrompt) {
+      // trigger the prompt
       deferredPrompt.prompt();
 
+      // checking for choice
       deferredPrompt.userChoice.then(function(_) {
+        // clearing the event
         deferredPrompt = null;
       })
     }
